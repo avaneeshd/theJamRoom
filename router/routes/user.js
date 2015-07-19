@@ -7,6 +7,7 @@ var express = require('express')
 
 
 router.post('/authenticate', function(req, res){
+	console.log(req);
 	var u = req.body.user;
 	User.findOne({'email': u.email}, function(err, user){
 		if(err){res.sendStatus(500);}
