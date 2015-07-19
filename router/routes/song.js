@@ -47,7 +47,7 @@ router.post('/', ensureAuth, function(req, res){
 		latitude: loc[0],
 		longitude: loc[1],
 		genre: s.genre,
-		uploadedOn: s.uploadedOn,
+		uploadedOn: Math.round((new Date()).getTime() / 1000),
 		path: req.files.song.path,
 		uploadedBy: req.headers['x-auth-token'],
 		fav_count: 0
