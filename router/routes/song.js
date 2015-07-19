@@ -40,11 +40,12 @@ router.get('/location/:location', ensureAuth, function(req, res){
 router.post('/', ensureAuth, function(req, res){
 	console.log(req);
 	var s = req.body;
+	var loc = req.body.location.split(",");
 	var song = {
 		name: s.title,
 		artist: s.artist,
-		latitude: s.latitude,
-		longitude: s.longitude,
+		latitude: loc[0],
+		longitude: loc[1],
 		genre: s.genre,
 		uploadedOn: s.uploadedOn,
 		path: req.files.song.path,
