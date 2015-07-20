@@ -27,7 +27,7 @@ router.get('/:songId', ensureAuth, function(req, res){
 	});
 });
 
-router.get('/stream/:songId', ensureAuth, function(req, res){
+router.get('/stream/:songId', function(req, res){
 	var songId = req.params.songId;
 	Song.findById(songId, function(err, song){
 		if(err) res.sendStatus(500);
