@@ -27,6 +27,21 @@ router.get('/:songId', ensureAuth, function(req, res){
 	});
 });
 
+router.get('/stream/:songId', ensureAuth, function(req, res){
+	var songId = req.params.songId;
+	Song.findById(songId, function(err, song){
+		if(err) res.sendStatus(500);
+		else{
+			var path = song.path;
+			path =  "./songs/" + path;
+			var stream = fs.createReadStream(path);
+			stream.on('error', function(){ console.log("Error while opening read stream to file"+ path); });
+			stream.pipe(res);
+		}
+	})
+});
+
+
 router.get('/location/:location', ensureAuth, function(req, res){
 	var loc = req.params.location;
 	Song.find({}, function(err, songs){

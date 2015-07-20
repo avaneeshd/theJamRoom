@@ -6,6 +6,7 @@ var express = require('express'),
 app.use(multer({'dest':'./songs'}));
 app.use(bodyParser.json());
 app.use(express.static(__dirname+ '/songs'));
+
 var router = require('./router')(app);
 var server = app.listen(8000);
 
