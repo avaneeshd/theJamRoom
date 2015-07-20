@@ -4,6 +4,7 @@ var express = require('express')
 	, ensureAuth = require('../../middleware/ensureAuthentication')
 	, busboy = require('connect-busboy')
 	, fs = require('fs')
+	, locationRec = require('../../middleware/locationRecommendation')
 	, router = express.Router();
 
 module.exports = router;
@@ -44,12 +45,10 @@ router.get('/stream/:songId', function(req, res){
 
 router.get('/location/:location', ensureAuth, function(req, res){
 	var loc = req.params.location;
-	Song.find({}, function(err, songs){
-		if(err) res.sendStatus(500);
-		else{
-			res.send({'songs': songs})
-		}
-	});
+	var location = loc.split(",");
+	latitude = location[0];
+	longitude = location[1];
+	locationRec(res, latitude, longitude, 100, "mi");
 });
 
 router.post('/', ensureAuth, function(req, res){
