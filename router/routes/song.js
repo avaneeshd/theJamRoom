@@ -48,7 +48,15 @@ router.get('/location/:location', ensureAuth, function(req, res){
 	var location = loc.split(",");
 	latitude = location[0];
 	longitude = location[1];
-	locationRec(res, latitude, longitude, 100, "mi");
+	//locationRec(res, loc, 100, "mi");
+	Song.find({}, function(err, songs){
+		if(err){
+			res.sendStatus(500);
+		}else{
+			res.send({"songs": songs});
+		}
+
+	})
 });
 
 router.post('/', ensureAuth, function(req, res){
