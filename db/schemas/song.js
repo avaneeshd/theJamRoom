@@ -4,8 +4,10 @@ var Schema = mongoose.Schema;
 var songSchema = new Schema({
     name: String,
     artist:String,
-    latitude: Number,
-    longitude: Number,
+    location: {
+		type: [Number],
+		index: '2d'
+	},
     genre: String,
     uploadedOn: Number,
 	path: String,

@@ -4,7 +4,6 @@ var express = require('express')
 	, ensureAuth = require('../../middleware/ensureAuthentication')
 	, busboy = require('connect-busboy')
 	, fs = require('fs')
-	, locationRec = require('../../middleware/locationRecommendation')
 	, router = express.Router();
 
 module.exports = router;
@@ -48,8 +47,12 @@ router.get('/location/:location', ensureAuth, function(req, res){
 	var location = loc.split(",");
 	latitude = location[0];
 	longitude = location[1];
-	//locationRec(res, loc, 100, "mi");
-	Song.find({}, function(err, songs){
+	Song.find({
+		location: {
+			$near: location,
+			$maxDistance: 10
+		}
+	}, function(err, songs){
 		if(err){
 			res.sendStatus(500);
 		}else{
@@ -60,14 +63,12 @@ router.get('/location/:location', ensureAuth, function(req, res){
 });
 
 router.post('/', ensureAuth, function(req, res){
-	console.log(req);
 	var s = req.body;
 	var loc = req.body.location.split(",");
 	var song = {
 		name: s.title,
 		artist: s.artist,
-		latitude: loc[0],
-		longitude: loc[1],
+		location: [loc[0], loc[1]],
 		genre: s.genre,
 		uploadedOn: Math.round((new Date()).getTime() / 1000),
 		path: req.files.song.name,
@@ -86,17 +87,45 @@ router.post('/', ensureAuth, function(req, res){
 
 
 router.get('/user/:userId', function(req, res){
-
+	var userID = req.params.userId;
+	Song.find({uploadedBy: userID}, function(err, songs){
+		if(err){
+			res.sendStatus(500);
+		}else{
+			res.send({'songs':songs});
+		}
+	});
 });
 
 router.get('/artist/:artistName', function(req, res){
-
+	var artistName = req.params.artistName;
+	Song.find({artist: new RegExp(artistName, "i")}, function(err, songs){
+		if(err){
+			res.sendStatus(500);
+		}else{
+			res.send({'songs':songs});
+		}
+	});
 });
 
-router.get('/genre/:genreName', function(req, res){
-
+router.get('/genre/:genre', function(req, res){
+	var genre = req.params.genre;
+	Song.find({genre: genre}, function(err, songs){
+		if(err){
+			res.sendStatus(500);
+		}else{
+			res.send({'songs':songs});
+		}
+	});
 });
 
 router.get('/name/:songName', function(req, res){
-
+	var songName = req.params.songName;
+	Song.find({name: new RegExp(songName, "i")}, function(err, songs){
+		if(err){
+			res.sendStatus(500);
+		}else{
+			res.send({'songs':songs});
+		}
+	});
 });

@@ -17,6 +17,7 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^0.8.3",
+    "binaryjs": "^0.2.1",
     "body-parser": "^1.13.2",
     "connect": "^3.4.0",
     "connect-busboy": "0.0.2",
@@ -28,6 +29,7 @@
     "mongoose": "^4.0.7",
     "multer": "^0.1.8",
     "passport": "^0.2.2",
-    "path": "^0.11.14"
+    "path": "^0.11.14",
+    "send": "^0.13.0"
   }
 }
